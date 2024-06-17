@@ -3,6 +3,7 @@ from selenium.webdriver.edge.options import Options
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 import time
+import csv
 
 service = Service()
 
@@ -42,4 +43,15 @@ while True:
 
 driver.quit()
 
-print(booksList)
+name = 'books.csv'
+
+campos = ['title', 'price', 'availability']
+
+with open(name, mode='w', newline='', encoding='utf-8') as arquivoCsv:
+    escritorCsv = csv.DictWriter(arquivoCsv, fieldnames=campos)
+    
+    escritorCsv.writeheader()
+    
+    escritorCsv.writerows(booksList)
+
+print(f"Arquivo '{name}' criado com sucesso.")
