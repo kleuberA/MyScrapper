@@ -62,7 +62,10 @@ for estado_nome, estado_link in estados_links:
                 if len(cols) == 2: 
                     orgao = cols[0].get_text(strip=True)
                     vagas = cols[1].get_text(strip=True)
-                    concursos_data.append({"orgao": orgao, "vagas": vagas})
+                    is_previsto = "previsto" in orgao.lower()
+
+                    orgao = orgao.replace("previsto", "").strip()
+                    concursos_data.append({"orgao": orgao, "vagas": vagas, "previsto": is_previsto})
         
         estado_data = {
             "estado": estado_nome,
@@ -73,7 +76,7 @@ for estado_nome, estado_link in estados_links:
         
         data.append(estado_data)
 
-driver.quit()
+driver.quit() 
 
 for estado in data:
     print(f"Estado: {estado['estado']}")
@@ -81,3 +84,8 @@ for estado in data:
     print(f"Subtítulo: {estado['subtitulo']}")
     for concurso in estado['concursos']:
         print(f"  Órgão: {concurso['orgao']}, Vagas: {concurso['vagas']}")
+
+with open('concurso.json', 'w', encoding='utf-8') as file:
+    json.dump(data, file, ensure_ascii=False, indent=4)
+
+print('Dados extraídos e salvos em concurso.json')
