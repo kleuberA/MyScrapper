@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Estado {
+  id        Int        @id @default(autoincrement())
+  estado    String
+  titulo    String
+  subtitulo String
+  concursos Concurso[]
+}
+
+model Concurso {
+  id       Int     @id @default(autoincrement())
+  orgao    String
+  vagas    String
+  previsto Boolean
+  estadoId Int
+  estado   Estado  @relation(fields: [estadoId], references: [id])
+}
