@@ -33,25 +33,24 @@ estados_links = [(estado.find('a').get_text(strip=True), estado.find('a')['href'
 data = []
 
 for estado_nome, estado_link in estados_links:
-    if estado_nome != 'NACIONAL':
-        driver.get(estado_link)
-        time.sleep(3)
+    driver.get(estado_link)
+    time.sleep(3)
         
-        page_content = driver.page_source
-        soup = BeautifulSoup(page_content, 'html.parser')
+    page_content = driver.page_source
+    soup = BeautifulSoup(page_content, 'html.parser')
 
-        conteudo = soup.find('main', class_='taxonomy')
+    conteudo = soup.find('main', class_='taxonomy')
         
-        header_title = ""
-        header_subtitle = ""
-        header = conteudo.find('header')
-        if header:
-            header_title_elem = header.find('h1')
-            if header_title_elem:
-                header_title = header_title_elem.get_text(strip=True)
-            header_subtitle_elem = header.find('h2')
-            if header_subtitle_elem:
-                header_subtitle = header_subtitle_elem.get_text(strip=True)
+    header_title = ""
+    header_subtitle = ""
+    header = conteudo.find('header')
+    if header:
+        header_title_elem = header.find('h1')
+        if header_title_elem:
+            header_title = header_title_elem.get_text(strip=True)
+        header_subtitle_elem = header.find('h2')
+        if header_subtitle_elem:
+            header_subtitle = header_subtitle_elem.get_text(strip=True)
         
         concursos_data = []
         tabela_concursos = conteudo.find('table')
