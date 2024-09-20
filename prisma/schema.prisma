@@ -23,3 +23,80 @@ model Concurso {
   estadoId Int
   estado   Estado  @relation(fields: [estadoId], references: [id])
 }
+
+model Law {
+  id           String    @id @default(uuid())
+  titulo       String
+  nomeTitulo   String
+  capitulo     String? // Opcional
+  nomeCapitulo String?
+  articles     Article[] // Uma lei pode ter vários artigos
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Article {
+  id         String            @id @default(uuid())
+  lawId      String // Chave estrangeira para Law
+  law        Law               @relation(fields: [lawId], references: [id])
+  artigo     String
+  contents   Content[] // Um artigo pode ter vários conteúdos (parágrafos)
+  flashcards Flashcard[] // Um artigo pode ter vários flashcards
+  questions  ArticleQuestion[] // Relacionamento many-to-many com Question
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Content {
+  id        String  @id @default(uuid())
+  articleId String // Chave estrangeira para Article
+  article   Article @relation(fields: [articleId], references: [id])
+  texto     String // Texto do conteúdo
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Flashcard {
+  id        String  @id @default(uuid())
+  articleId String // Chave estrangeira para Article
+  article   Article @relation(fields: [articleId], references: [id])
+  front     String // Frente do flashcard
+  back      String // Verso do flashcard
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id            String            @id @default(uuid())
+  question      String // A pergunta em si
+  questionType  String // Tipo da pergunta ("TRUE_FALSE" ou "MULTIPLE_CHOICE")
+  correctAnswer String? // A resposta correta (usado para múltipla escolha ou verdadeiro/falso)
+  options       Option[] // Array de opções (usado apenas se for de múltipla escolha)
+  articles      ArticleQuestion[] // Relacionamento many-to-many com Article
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Option {
+  id         String   @id @default(uuid())
+  questionId String // Chave estrangeira para Question
+  question   Question @relation(fields: [questionId], references: [id])
+  text       String // Texto da opção
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ArticleQuestion {
+  articleId  String
+  questionId String
+  article    Article  @relation(fields: [articleId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id])
+
+  @@id([articleId, questionId]) // Define a chave primária composta
+}
