@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import time
 import json
 import re
+import csv
 
 # Função para limpar o texto
 def limpar_texto(texto):
@@ -125,4 +126,23 @@ driver.quit()  # Encerrar o WebDriver
 with open('constituicao.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=4)
 
-print("Arquivo JSON criado com sucesso!")
+# Criar o arquivo CSV
+with open('constituicao.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    csvwriter = csv.writer(csvfile)
+    
+    # Escrever o cabeçalho
+    csvwriter.writerow(['Título', 'Nome do Título', 'Capítulo', 'Nome do Capítulo', 'Artigo', 'Conteúdo'])
+
+    # Preencher o CSV com os dados extraídos
+    for item in data:
+        titulo = item['titulo']
+        nome_titulo = item['nome_titulo']
+        capitulo = item['capitulo']
+        nome_capitulo = item['nome_capitulo']
+        for artigo in item['artigos']:
+            artigo_numero = artigo['artigo']
+            conteudo = " ".join(artigo['conteudo'])  # Unir o conteúdo em uma única string
+            # Escrever os dados no CSV
+            csvwriter.writerow([titulo, nome_titulo, capitulo, nome_capitulo, artigo_numero, conteudo])
+
+print("Arquivos JSON e CSV criados com sucesso!")
