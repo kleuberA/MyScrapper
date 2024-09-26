@@ -26,10 +26,13 @@ model Concurso {
 
 model Law {
   id           String    @id @default(uuid())
-  titulo       String
-  nomeTitulo   String
+  tipo         String // O tipo da lei (ex: Constituição, Código Civil, etc.)
+  titulo       String?
+  nomeTitulo   String?
   capitulo     String? // Opcional
   nomeCapitulo String?
+  secao        String?
+  nomeSecao    String?
   articles     Article[] // Uma lei pode ter vários artigos
 
   createdAt DateTime @default(now())
@@ -43,6 +46,7 @@ model Article {
   artigo     String
   contents   Content[] // Um artigo pode ter vários conteúdos (parágrafos)
   flashcards Flashcard[] // Um artigo pode ter vários flashcards
+  notes      Note[] // Um artigo pode ter várias anotações
   questions  ArticleQuestion[] // Relacionamento many-to-many com Question
 
   createdAt DateTime @default(now())
@@ -65,6 +69,16 @@ model Flashcard {
   article   Article @relation(fields: [articleId], references: [id])
   front     String // Frente do flashcard
   back      String // Verso do flashcard
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Note {
+  id        String  @id @default(uuid())
+  articleId String // Chave estrangeira para Article
+  article   Article @relation(fields: [articleId], references: [id])
+  content   String // Conteúdo da anotação
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
