@@ -61,56 +61,58 @@ def salvar_capitulo_ou_secao():
             "artigos": artigos
         })
 
-# Modificação para capturar títulos, capítulos e seções com <br> separando as linhas
+# Função auxiliar para extrair o próximo conteúdo após uma quebra de linha <br>
+def extrair_conteudo_apos_br(elemento):
+    br_tag = elemento.find('br')
+    if br_tag and br_tag.next_sibling:
+        return limpar_texto(br_tag.next_sibling.get_text(strip=True) if br_tag.next_sibling.name else str(br_tag.next_sibling))
+    return None
+
+# Modificação para capturar títulos, capítulos e seções com <br> ou outras variações
 for i, p in enumerate(paragrafos):
-    font_tags = p.find_all('font')
+    texto_elemento = limpar_texto(p.get_text(separator=" ", strip=True))
     
-    # Verifica se existem tags <font> e processa conforme o caso
-    if len(font_tags) > 0:
-        texto_elemento = limpar_texto(font_tags[0].get_text(separator=" ", strip=True))
+    # Verifica se é um Título
+    if re.search(r'TÍTULO [IVXLCDM]+', texto_elemento):
+        # Salvar o capítulo ou seção anterior
+        salvar_capitulo_ou_secao()
+        
+        # Iniciar novo Título
+        titulo_atual = re.search(r'(TÍTULO [IVXLCDM]+)', texto_elemento).group(1)
+        nome_titulo = extrair_conteudo_apos_br(p) or texto_elemento.replace(titulo_atual, '').strip()
+        capitulo_atual = None
+        nome_capitulo = None
+        secao_atual = None
+        nome_secao = None
+        artigos = []
+        artigo_atual = None
 
-        # Verifica se é um Título
-        if 'TÍTULO' in texto_elemento:
-            # Salvar o capítulo ou seção anterior
-            salvar_capitulo_ou_secao()
-            
-            # Iniciar novo Título
-            titulo_atual = re.match(r'(TÍTULO [IVXLCDM]+)', texto_elemento).group(1) if re.match(r'(TÍTULO [IVXLCDM]+)', texto_elemento) else None
-            nome_titulo = limpar_texto(font_tags[0].find_next('br').next_sibling.strip()) if font_tags[0].find_next('br') else None
-            capitulo_atual = None
-            nome_capitulo = None
-            secao_atual = None
-            nome_secao = None
-            artigos = []
-            artigo_atual = None
+    # Verifica se é um Capítulo
+    elif re.search(r'CAPÍTULO [IVXLCDM]+', texto_elemento):
+        # Salvar o capítulo ou seção anterior
+        salvar_capitulo_ou_secao()
+        
+        # Iniciar novo Capítulo
+        capitulo_atual = re.search(r'(CAPÍTULO [IVXLCDM]+)', texto_elemento).group(1)
+        nome_capitulo = extrair_conteudo_apos_br(p) or texto_elemento.replace(capitulo_atual, '').strip()
+        secao_atual = None
+        nome_secao = None
+        artigos = []
+        artigo_atual = None
 
-        # Verifica se é um Capítulo
-        elif 'CAPÍTULO' in texto_elemento:
-            # Salvar o capítulo ou seção anterior
-            salvar_capitulo_ou_secao()
-            
-            # Iniciar novo Capítulo
-            capitulo_atual = re.match(r'(CAPÍTULO [IVXLCDM]+)', texto_elemento).group(1) if re.match(r'(CAPÍTULO [IVXLCDM]+)', texto_elemento) else None
-            nome_capitulo = limpar_texto(font_tags[0].find_next('br').next_sibling.strip()) if font_tags[0].find_next('br') else None
-            secao_atual = None
-            nome_secao = None
-            artigos = []
-            artigo_atual = None
-
-        # Verifica se é uma Seção
-        elif 'Seção' in texto_elemento:
-            # Salvar o capítulo ou seção anterior
-            salvar_capitulo_ou_secao()
-            
-            # Iniciar nova Seção
-            secao_atual = re.match(r'(Seção [IVXLCDM]+)', texto_elemento).group(1) if re.match(r'(Seção [IVXLCDM]+)', texto_elemento) else None
-            nome_secao = limpar_texto(font_tags[0].find_next('br').next_sibling.strip()) if font_tags[0].find_next('br') else None
-            artigos = []
-            artigo_atual = None
+    # Verifica se é uma Seção
+    elif re.search(r'Seção [IVXLCDM]+', texto_elemento):
+        # Salvar o capítulo ou seção anterior
+        salvar_capitulo_ou_secao()
+        
+        # Iniciar nova Seção
+        secao_atual = re.search(r'(Seção [IVXLCDM]+)', texto_elemento).group(1)
+        nome_secao = extrair_conteudo_apos_br(p) or texto_elemento.replace(secao_atual, '').strip()
+        artigos = []
+        artigo_atual = None
 
     # Verifica se é um Artigo (começa com "Art.")
-    texto_elemento = limpar_texto(p.get_text(strip=True))
-    if re.match(r'Art\. \d+', texto_elemento):
+    elif re.match(r'Art\. \d+', texto_elemento):
         if artigo_atual:
             artigos.append(artigo_atual)
         
@@ -139,7 +141,7 @@ data.append({
 driver.quit()  # Encerrar o WebDriver
 
 # Salvar os dados em um arquivo JSON
-with open('codigo-civil.json', 'w', encoding='utf-8') as f:
+with open('codigo-civil-teste2.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=4)
 
 print("Arquivo JSON criado com sucesso!")

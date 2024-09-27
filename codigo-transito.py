@@ -142,7 +142,7 @@ if artigo_atual:
 salvar_capitulo_ou_secao()
 
 data.append({
-    "titulo": "Código de Trânsito Brasileiro",
+    "tipo": "Código de Trânsito Brasileiro",
     "data": "",
     "todos_artigos": todos_artigos
 })
