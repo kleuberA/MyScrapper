@@ -163,18 +163,26 @@ for i, p in enumerate(paragrafos):
     elif re.match(r'Art\. \d+', texto_elemento):
         if artigo_atual:
             artigos.append(artigo_atual)
-        
+
+        # Format the article to change "Art. Xº" to "Art. X°" and remove any trailing hyphen
+        artigo_formatado = re.sub(r'Art\.\s*(\d+)\º', r'Art. \1°', texto_elemento).replace(" -", "")
+
         # Armazena a epígrafe com o artigo atual
         artigo_atual = {
-            "artigo": texto_elemento,
+            "artigo": artigo_formatado,  # Use the formatted article
             "conteudo": [],
             "epigrafe": epigrafe_atual  # Associa a epígrafe ao artigo
         }
         epigrafe_atual = None  # Limpa a epígrafe logo após salvar no artigo
 
+    # ...
+
     elif artigo_atual and not ('TÍTULO' in texto_elemento or 'CAPÍTULO' in texto_elemento or 'Seção' in texto_elemento):
         # Adiciona o conteúdo ao artigo atual, mas só se não for epígrafe
-        artigo_atual['conteudo'].append(texto_elemento)
+        # Remove any leading or trailing hyphen before adding content
+        conteudo_formatado = limpar_texto(texto_elemento).replace(" -", "")
+        artigo_atual['conteudo'].append(conteudo_formatado)
+
 
 if artigo_atual:
     artigos.append(artigo_atual)

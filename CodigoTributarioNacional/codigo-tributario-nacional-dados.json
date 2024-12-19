@@ -105,23 +105,13 @@
 							"III - estabelecer limitações ao tráfego, no território nacional, de pessoas ou mercadorias, por meio de tributos interestaduais ou intermunicipais;",
 							"IV - cobrar impôsto sôbre:",
 							"a) o patrimônio, a renda ou os serviços uns dos outros;",
-							"b) templos de qualquer culto;"
+							"b) templos de qualquer culto;",
+							"c) o patrimônio, a renda ou serviços dos partidos políticos, inclusive suas fundações, das entidades sindicais dos trabalhadores, das instituições de educação e de assistência social, sem fins lucrativos, observados os requisitos fixados na  deste Capítulo; (Redação dada pela Lei Complementar nº 104, de 2001)",
+							"d) papel destinado exclusivamente à impressão de jornais, periódicos e livros.",
+							" § 1º O disposto no inciso IV não exclui a atribuição, por lei, às entidades nêle referidas, da condição de responsáveis pelos tributos que lhes caiba reter na fonte, e não as dispensa da prática de atos, previstos em lei, assecuratórios do cumprimento de obrigações tributárias por terceiros.",
+							"§ 2º O disposto na alínea a do inciso IV aplica-se, exclusivamente, aos serviços próprios das pessoas jurídicas de direito público a que se refere este artigo, e inerentes aos seus objetivos."
 						]
-					}
-				]
-			},
-			{
-				"livro": null,
-				"nome_livro": null,
-				"titulo": "TÍTULO II",
-				"nome_titulo": "Competência Tributária",
-				"capitulo": "CAPÍTULO II",
-				"nome_capitulo": "Limitações da Competência Tributária",
-				"secao": "Seção II",
-				"nome_secao": "c) o patrimônio, a renda ou serviços dos partidos políticos, inclusive suas fundações, das entidades sindicais dos trabalhadores, das instituições de educação e de assistência social, sem fins lucrativos, observados os requisitos fixados na  deste Capítulo; (Redação dada pela Lei Complementar nº 104, de 2001)",
-				"subsecao": null,
-				"nome_subsecao": null,
-				"artigos": [
+					},
 					{
 						"artigo": "Art. 10. É vedado à União instituir tributo que não seja uniforme em todo o território nacional, ou que importe distinção ou preferência em favor de determinado Estado ou Município.",
 						"conteudo": []
