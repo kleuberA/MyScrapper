@@ -9,6 +9,8 @@ import json
 import os
 import re
 
+start_time = time.time()
+
 init(autoreset=True)
 
 def limpar_texto(texto):
@@ -191,3 +193,7 @@ if alteracoes:
         print(alteracao)
 else:
     print("\nNenhuma alteração detectada.")
+
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"\nTempo de execução: {execution_time:.2f} segundos")
