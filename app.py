@@ -144,7 +144,7 @@ def realizar_scraping(url: str):
         if primeira_execucao:
             with open(ARQUIVO_JSON, 'w', encoding='utf-8') as f:
                 json.dump([data_atual], f, ensure_ascii=False, indent=4)
-            return JSONResponse(content=data_atual)
+            return JSONResponse(content={"dados": data_atual, "alteracao": False})
         else:
             with open(ARQUIVO_JSON, 'r', encoding='utf-8') as f:
                 dados_antigos = json.load(f)[0]
@@ -183,7 +183,7 @@ def realizar_scraping(url: str):
             json.dump(json_alteracoes, f, ensure_ascii=False, indent=4)
 
         
-        return JSONResponse(content={"dados": data_atual, "alteracoes": json_alteracoes})
+        return JSONResponse(content={"dados": data_atual, "alteracoes": json_alteracoes, "alteracao": json_alteracoes != [] })
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao realizar scraping: {str(e)}")
