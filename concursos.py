@@ -1,12 +1,9 @@
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.edge.options import Options
-from selenium.webdriver.common.by import By
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
-import csv
 import json
-import re
 
 service = Service()
 options = Options()
