@@ -23,8 +23,23 @@ def get_imdb_lancamentos():
     for idx, movie in enumerate(movie_list, 1):
         title_element = movie.select('div > hgroup > h3.ipc-title__text')[0]
         title = title_element.get_text(strip=True)
-        print(title)
         
+        # Selecting the metadata list
+        ul_element_list = movie.select('.ipc-metadata-list')
+        for ul_element in ul_element_list:
+            # Extract the <img> tag and its src attribute
+            img_tag = ul_element.select('.ipc-metadata-list-summary-item img')
+            if img_tag:
+                img_src = img_tag[0].get('src')
+                print(f"Image {idx}: {img_src}")
+            name_movie_element = ul_element.select(".ipc-metadata-list-summary-item__t")[0]
+            name_movie = name_movie_element.get_text(strip=True)
+            print(f"Name Movie: {name_movie}")
+        
+        # Optionally, print the movie title
+        print(f"Movie {idx}: {title}")
+
+    driver.quit()
 
 if __name__ == "__main__":
     get_imdb_lancamentos()
