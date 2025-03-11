@@ -34,7 +34,9 @@ def get_imdb_lancamentos():
                 print(f"Image {idx}: {img_src}")
             name_movie_element = ul_element.select(".ipc-metadata-list-summary-item__t")[0]
             name_movie = name_movie_element.get_text(strip=True)
+            category_element = ul_element.select(".ipc-metadata-list-summary-item__tl")
             print(f"Name Movie: {name_movie}")
+            print(f"Category: {category_element}")
         
         # Optionally, print the movie title
         print(f"Movie {idx}: {title}")
