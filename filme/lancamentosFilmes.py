@@ -38,11 +38,17 @@ def get_imdb_lancamentos():
                 for cat in movie_li.select("ul.ipc-metadata-list-summary-item__tl > li.ipc-inline-list__item > span.ipc-metadata-list-summary-item__li")
             ]
 
+            actors = [
+                actor.get_text(strip=True)
+                for actor in movie_li.select("ul.ipc-metadata-list-summary-item__stl > li.ipc-inline-list__item > span.ipc-metadata-list-summary-item__li")
+            ]
+
             movies.append({
                 "date_section": title,
                 "name": name,
                 "image": img_src,
-                "categories": categories
+                "categories": categories,
+                "actors": actors
             })
 
     driver.quit()
@@ -54,5 +60,6 @@ if __name__ == "__main__":
         print(f"Seção: {movie['date_section']}")
         print(f"Filme: {movie['name']}")
         print(f"Categorias: {movie['categories']}")
+        print(f"Atores: {movie['actors']}")
         print(f"Imagem: {movie['image']}")
         print("-" * 50)
