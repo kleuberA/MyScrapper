@@ -2,6 +2,7 @@ from selenium.webdriver.edge.service import Service
 from selenium.webdriver.edge.options import Options
 from selenium import webdriver
 from bs4 import BeautifulSoup
+from collections import Counter
 
 service = Service()
 options = Options()
@@ -54,8 +55,24 @@ def get_imdb_lancamentos():
     driver.quit()
     return movies
 
+def contar_categorias(movies):
+    todas_categorias = []
+    for movie in movies:
+        todas_categorias.extend(movie['categories'])
+    
+    categoria_contagem = Counter(todas_categorias)
+    
+    return categoria_contagem
+
 if __name__ == "__main__":
     movies = get_imdb_lancamentos()
+    
+    categoria_contagem = contar_categorias(movies)
+    
+    print("Categorias mais comuns:")
+    for categoria, quantidade in categoria_contagem.most_common():
+        print(f"{categoria}: {quantidade} vezes")
+    
     for movie in movies:
         print(f"Seção: {movie['date_section']}")
         print(f"Filme: {movie['name']}")
