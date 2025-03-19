@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from bs4 import BeautifulSoup
+import json  # Adicione esta importação
 
 service = Service()
 options = Options()
@@ -48,8 +49,6 @@ def get_quotes():
                 EC.presence_of_element_located((By.CLASS_NAME, 'quote')))
         except TimeoutException:
             break  
-        
-
     
     driver.quit()
     return quotes
@@ -57,4 +56,9 @@ def get_quotes():
 if __name__ == "__main__":
     quotes = get_quotes()
     print(f"Total de citações coletadas: {len(quotes)}")
-    print(quotes)
+    
+    # Salvar em JSON
+    with open("./quote/quotes.json", "w", encoding="utf-8") as arquivo:
+        json.dump(quotes, arquivo, ensure_ascii=False, indent=4)
+    
+    print("Arquivo 'quotes.json' gerado com sucesso!")
