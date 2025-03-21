@@ -1,1 +1,23 @@
-[]
+[
+    {
+        "title": "Galaxy Tab",
+        "price": "$251.99",
+        "description": "16GB, White",
+        "rating": "3",
+        "link": "https://webscraper.io/test-sites/e-commerce/allinone/product/16"
+    },
+    {
+        "title": "Acer Swift 1 S...",
+        "price": "$488.64",
+        "description": "Acer Swift 1 SF113-31 Silver, 13.3\" FHD, Pentium N4200, 4GB, 128GB SSD, Windows 10 Home",
+        "rating": "3",
+        "link": "https://webscraper.io/test-sites/e-commerce/allinone/product/90"
+    },
+    {
+        "title": "Lenovo Legion...",
+        "price": "$1399",
+        "description": "Lenovo Legion Y720, 15.6\" FHD IPS, Core i7-7700HQ, 8GB, 128GB SSD + 2TB HDD, GeForce GTX 1060 6GB, DOS, RGB backlit keyboard",
+        "rating": "3",
+        "link": "https://webscraper.io/test-sites/e-commerce/allinone/product/56"
+    }
+]
