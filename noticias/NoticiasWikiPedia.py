@@ -34,35 +34,37 @@ def get_g1_news():
         WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'div.bastian-page'))
         )
-        time.sleep(2)  # Espera para conteúdo dinâmico
+        # time.sleep(2)  # Espera para conteúdo dinâmico
         
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         news = []
+
+        print(soup.select('div._evg'))
         
         # Extrair notícias principais
-        for article in soup.select('div.feed-post-body'):
-            try:
-                title = article.select_one('a.feed-post-link').text.strip()
-                link = article.select_one('a.feed-post-link')['href']
+        # for article in soup.select('div.feed-post-body'):
+            # try:
+            #     title = article.select_one('a.feed-post-link').text.strip()
+            #     link = article.select_one('a.feed-post-link')['href']
                 
-                # Extrair resumo (se existir)
-                summary = article.select_one('div.feed-post-body-resumo')
-                summary = summary.text.strip() if summary else ''
+            #     # Extrair resumo (se existir)
+            #     summary = article.select_one('div.feed-post-body-resumo')
+            #     summary = summary.text.strip() if summary else ''
                 
-                # Extrair metadados
-                time_element = article.select_one('span.feed-post-datetime')
-                time = time_element.text.strip() if time_element else ''
+            #     # Extrair metadados
+            #     time_element = article.select_one('span.feed-post-datetime')
+            #     time = time_element.text.strip() if time_element else ''
                 
-                news.append({
-                    'titulo': title,
-                    'resumo': summary,
-                    'horario': time,
-                    'link': link
-                })
+            #     news.append({
+            #         'titulo': title,
+            #         'resumo': summary,
+            #         'horario': time,
+            #         'link': link
+            #     })
                 
-            except Exception as e:
-                print(f"Erro ao processar artigo: {str(e)}")
-                continue
+            # except Exception as e:
+            #     print(f"Erro ao processar artigo: {str(e)}")
+            #     continue
         
         return news
 
@@ -80,7 +82,7 @@ if __name__ == "__main__":
     noticias = get_g1_news()
     print(f"Notícias encontradas: {len(noticias)}")
     
-    with open("noticias_g1.json", "w", encoding="utf-8") as f:
+    with open("./noticias/noticias_g1.json", "w", encoding="utf-8") as f:
         json.dump(noticias, f, ensure_ascii=False, indent=4)
     
     print("Dados salvos em noticias_g1.json")
