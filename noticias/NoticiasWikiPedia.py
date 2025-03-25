@@ -37,36 +37,57 @@ def get_g1_news():
         # time.sleep(2)  # Espera para conteúdo dinâmico
         
         soup = BeautifulSoup(driver.page_source, 'html.parser')
-        news = []
+        news_items = []
 
-        print(soup.select('div._evg'))
-        
-        # Extrair notícias principais
-        # for article in soup.select('div.feed-post-body'):
-            # try:
-            #     title = article.select_one('a.feed-post-link').text.strip()
-            #     link = article.select_one('a.feed-post-link')['href']
+        # Encontrar todos os itens de notícia
+        for item in soup.select('div.bastian-feed-item[data-type="materia"]'):
+            try:
+                # Extrair dados principais
+                title_elem = item.select_one('a.feed-post-link')
+                title = title_elem.text.strip() if title_elem else ''
+                link = title_elem['href'] if title_elem else ''
                 
-            #     # Extrair resumo (se existir)
-            #     summary = article.select_one('div.feed-post-body-resumo')
-            #     summary = summary.text.strip() if summary else ''
+                time_element = item.select_one('span.feed-post-datetime')
+                time_text = time_element.text.strip() if time_element else ''
                 
-            #     # Extrair metadados
-            #     time_element = article.select_one('span.feed-post-datetime')
-            #     time = time_element.text.strip() if time_element else ''
+                section_element = item.select_one('span.feed-post-metadata-section')
+                section = section_element.text.strip() if section_element else ''
                 
-            #     news.append({
-            #         'titulo': title,
-            #         'resumo': summary,
-            #         'horario': time,
-            #         'link': link
-            #     })
+                # Extrair imagem
+                img_element = item.select_one('img.bstn-fd-picture-image')
+                img_url = img_element['src'] if img_element else ''
+                img_alt = img_element['alt'] if img_element else ''
                 
-            # except Exception as e:
-            #     print(f"Erro ao processar artigo: {str(e)}")
-            #     continue
-        
-        return news
+                # Extrair conteúdo relacionado
+                related = []
+                for related_item in item.select('li.bstn-relateditem'):
+                    related_title = related_item.select_one('a.bstn-relatedtext').text.strip()
+                    related_link = related_item.select_one('a.bstn-relatedtext')['href']
+                    related_time = related_item.select_one('span.feed-post-datetime').text.strip() if related_item.select_one('span.feed-post-datetime') else ''
+                    
+                    related.append({
+                        'titulo_relacionado': related_title,
+                        'link_relacionado': related_link,
+                        'horario_relacionado': related_time
+                    })
+
+                news_items.append({
+                    'titulo': title,
+                    'link': link,
+                    'horario': time_text,
+                    'secao': section,
+                    'imagem': {
+                        'url': img_url,
+                        'descricao': img_alt
+                    },
+                    'conteudo_relacionado': related
+                })
+
+            except Exception as e:
+                print(f"Erro ao processar item: {str(e)}")
+                continue
+
+        return news_items
 
     except WebDriverException as e:
         print(f"Erro no WebDriver: {str(e)}")
